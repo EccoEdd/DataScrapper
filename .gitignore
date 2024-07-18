@@ -1,6 +1,5 @@
 #PyCache
 __pycache__
 
-#Excel archives 
-amazon_books.xlsx
-~$amazon_books.xlsx
+#Excel archives
+*.xlsx
