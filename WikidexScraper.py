@@ -4,12 +4,11 @@ from WebScrapper import WebScraper
 class WikidexScraper(WebScraper):
     def scrape_data(self):
         names = []
-        expansions = []
         numbers = []
 
         if not self.driver:
             print("WebDriver not initialized properly.")
-            return {'Name': names, 'Expansion': expansions, 'Number': numbers}
+            return {'Name': names, 'Number': numbers}
         
         try:
             coliseo_header = self.driver.find_element(By.XPATH, "//span[text()='Coliseo']")
