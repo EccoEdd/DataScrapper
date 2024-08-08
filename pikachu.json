@@ -1,0 +1,25 @@
+{
+    "settings": [
+        {
+            "url": "https://pokemon.fandom.com/es/wiki/Pikachu",
+            "actions": [
+                {
+                    "type": "extract",
+                    "data": [
+                        {
+                            "name": "Stat",
+                            "xpath": "//div[@id=\"mw-content-text\"]/div/table[@class=\"estadisticas\"]//tr/th"
+                        },
+                        {
+                            "name": "Value",
+                            "xpath": "//div[@id=\"mw-content-text\"]/div/table[@class=\"estadisticas\"]//tr/td"
+                        }
+                    ]
+                }
+            ],
+            "pagination": {
+                "hasPaginator": false
+            }
+        }
+    ]
+}

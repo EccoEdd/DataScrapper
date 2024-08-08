@@ -1,0 +1,30 @@
+{
+    "settings": [
+        {
+            "url": "https://material.angular.io/components/table/overview",
+            "actions": [
+                {
+                    "type": "extract",
+                    "data": [
+                        {
+                            "name": "Name",
+                            "xpath": "//*[@id='table-pagination']/div/div[2]/table-pagination-example/div/table/tbody/tr/td[1]"
+                        },
+                        {
+                            "name": "Weight",
+                            "xpath": "//*[@id='table-pagination']/div/div[2]/table-pagination-example/div/table/tbody/tr/td[2]"
+                        },
+                        {
+                            "name": "Symbol",
+                            "xpath": "//*[@id='table-pagination']/div/div[2]/table-pagination-example/div/table/tbody/tr/td[3]"
+                        }
+                    ]
+                }
+            ],
+            "pagination": {
+                "hasPaginator": true,
+                "nextPageXPath": "//*[@id='table-pagination']/div/div[2]/table-pagination-example/div/mat-paginator/div/div/div[2]/button[3]"
+            }
+        }
+    ]
+}

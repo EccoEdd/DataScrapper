@@ -1,0 +1,33 @@
+{
+    "settings": [
+        {
+            "url": "https://www.amazon.com/",
+            "actions": [
+                {
+                "type": "search",
+                "query": "Mushoku Tensei Light novel",
+                "searchBoxXPath": "//input[@id='twotabsearchtextbox']",
+                "submitXPath": "//input[@id='nav-search-submit-button']"
+                },
+                {
+                "type": "extract",
+                "data": [
+                    {
+                    "name": "Title",
+                    "xpath": "//div[@data-component-type='s-search-result']//h2//a//span"
+                    },
+                    {
+                    "name": "Price",
+                    "xpath": "//div[@data-component-type='s-search-result']//span[@class='a-price-whole']"
+                    }
+                ]
+                }
+            ],
+            "pagination": {
+                "hasPaginator": true,
+                "nextPageXPath": "//li[@class='a-last']/a"
+            }
+        }
+    ]
+}
+  
