@@ -32,7 +32,6 @@ class TableScraper:
                 page_data = self._extract_data(action['data'])
                 all_data.extend(page_data)
                 
-                # Handle pagination if necessary
                 while self._handle_pagination():
                     page_data = self._extract_data(action['data'])
                     all_data.extend(page_data)
