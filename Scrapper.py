@@ -75,7 +75,7 @@ class TableScraper:
                 elements = WebDriverWait(self.driver, 10).until(
                     EC.presence_of_all_elements_located((By.XPATH, field['xpath']))
                 )
-                extracted_data[field['name']] = elements
+                extracted_data[field['name']] = [element.text for element in elements]
             except (NoSuchElementException, TimeoutException):
                 logging.warning(f"No elements found for {field['name']} using XPath {field['xpath']}")
                 extracted_data[field['name']] = []
@@ -89,7 +89,7 @@ class TableScraper:
             for field in data_fields:
                 elements = extracted_data[field['name']]
                 if i < len(elements):
-                    value = elements[i].text if 'attribute' not in field else elements[i].get_attribute(field['attribute'])
+                    value = elements[i] if 'attribute' not in field else elements[i].get_attribute(field['attribute'])
                     item[field['name']] = value
                 else:
                     item[field['name']] = None

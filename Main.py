@@ -6,7 +6,7 @@ from Scrapper import TableScraper
 
 class TestTableScraper(unittest.TestCase):
     def setUp(self):
-        with open('examen.json') as file:
+        with open('examen.json', encoding='utf-8') as file:
             self.all_settings = json.load(file)
 
     def test_scrape_all(self):

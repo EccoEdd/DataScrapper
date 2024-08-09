@@ -13,38 +13,38 @@
                     "data": [
                         {
                             "name": "Programa Educativo",
-                            "xpath": "//div[@class='programa-educativo']"
+                            "xpath": "//div[contains(@class, 'row mx-auto')]/div[1]//div[@class='col-12 px-4']"
                         },
                         {
                             "name": "Asignatura",
-                            "xpath": "//div[@class='asignatura']"
+                            "xpath": "//div[contains(@class, 'row mx-auto')]/div[2]//div[@class='col-12 px-4']"
                         },
                         {
                             "name": "Tema",
-                            "xpath": "//div[@class='tema']"
+                            "xpath": "//div[contains(@class, 'row mx-auto')]/div[3]//div[@class='col-12 px-4']"
                         },
                         {
                             "name": "Sitio",
-                            "xpath": "//div[@class='sitio']/a"
+                            "xpath": "//div[contains(@class, 'row mx-auto')]/div[4]//div[@class='col-12 px-4']"
                         },
                         {
                             "name": "Enlace Directo de la Práctica",
-                            "xpath": "//div[@class='enlace-directo']/a"
+                            "xpath": "//div[contains(@class, 'row mx-auto')]/div[5]//a"
                         },
                         {
                             "name": "Alcance",
-                            "xpath": "//div[@class='alcance']"
+                            "xpath": "//div[contains(@class, 'row mx-auto')]/div[6]//div[@class='col-12 px-4']"
                         },
                         {
                             "name": "Observaciones",
-                            "xpath": "//div[@class='observaciones']"
+                            "xpath": "//div[contains(@class, 'row mx-auto')]/div[7]//div[@class='col-12 px-4']"
                         }
                     ]
                 }
             ],
             "pagination": {
                 "hasPaginator": true,
-                "nextPageXPath": "//a[@class='paginate_button next']"
+                "nextPageXPath": "//*[@id='pagination_controls']/a[5]"
             }
         }
     ]
