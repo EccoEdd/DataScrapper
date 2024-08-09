@@ -6,6 +6,7 @@ from webdriver_manager.firefox import GeckoDriverManager
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import Select
 
 logging.basicConfig(level=logging.INFO)
 
@@ -26,17 +27,31 @@ class TableScraper:
     def perform_actions(self):
         all_data = []
         for action in self.actions:
-            if action['type'] == 'search':
+            if action['type'] == 'select':
+                self._perform_select(action)
+            elif action['type'] == 'search':
                 self._perform_search(action)
             elif action['type'] == 'extract':
                 page_data = self._extract_data(action['data'])
                 all_data.extend(page_data)
-                
+
                 while self._handle_pagination():
                     page_data = self._extract_data(action['data'])
                     all_data.extend(page_data)
-        
+
         return all_data
+    
+    def _perform_select(self, action):
+        try:
+            select_element = WebDriverWait(self.driver, 10).until(
+                EC.presence_of_element_located((By.XPATH, action['selectXPath']))
+            )
+            select = Select(select_element)
+            select.select_by_visible_text(action['optionValue'])
+            logging.info(f"Selected option '{action['optionValue']}' from the dropdown.")
+        except (NoSuchElementException, TimeoutException) as e:
+            logging.error(f"Error selecting option: {e}")
+            raise
 
     def _perform_search(self, action):
         try:
