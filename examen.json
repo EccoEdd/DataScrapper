@@ -1,0 +1,51 @@
+{
+    "settings": [
+        {
+            "url": "https://www.tecnm.mx/?vista=TecNM_Virtual&tecnm_virtual=Capitacion_Linea&S=G&registros=5&pn=1",
+            "actions": [
+                {
+                    "type": "select",
+                    "selectXPath": "//select[@name='programa_educativo']",
+                    "optionValue": "Arquitectura"
+                },
+                {
+                    "type": "extract",
+                    "data": [
+                        {
+                            "name": "Programa Educativo",
+                            "xpath": "/html/body/div[7]/div[2]/div[4]/div[4]/div[1]/div/div/div[2]"
+                        },
+                        {
+                            "name": "Asignatura",
+                            "xpath": "/html/body/div[7]/div[2]/div[4]/div[4]/div[2]/div/div/div[2]"
+                        },
+                        {
+                            "name": "Tema",
+                            "xpath": "/html/body/div[7]/div[2]/div[4]/div[4]/div[3]/div/div/div[2]"
+                        },
+                        {
+                            "name": "Sitio",
+                            "xpath": "/html/body/div[7]/div[2]/div[4]/div[4]/div[4]/div/div/div[2]/a"
+                        },
+                        {
+                            "name": "Enlace Directo de la Práctica",
+                            "xpath": "/html/body/div[7]/div[2]/div[4]/div[4]/div[5]/div/div/div[2]/a"
+                        },
+                        {
+                            "name": "Alcance",
+                            "xpath": "/html/body/div[7]/div[2]/div[4]/div[4]/div[6]/div/div/div[2]"
+                        },
+                        {
+                            "name": "Observaciones",
+                            "xpath": "/html/body/div[7]/div[2]/div[4]/div[4]/div[7]/div/div/div[2]"
+                        }
+                    ]
+                }
+            ],
+            "pagination": {
+                "hasPaginator": true,
+                "nextPageXPath": "//a[@class='paginate_button next']"
+            }
+        }
+    ]
+}

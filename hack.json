@@ -1,0 +1,25 @@
+{
+    "settings": [
+        {
+            "url": "https://en.wikipedia.org/wiki/.hack_(video_game_series)",
+            "actions": [
+                {
+                    "type": "extract",
+                    "data": [
+                        {
+                            "name": "Title",
+                            "xpath": "//*[@id='mw-content-text']/div[1]/div[14]/table/tbody/tr/td[1]"
+                        },
+                        {
+                            "name": "lenght",
+                            "xpath": "//*[@id='mw-content-text']/div[1]/div[14]/table/tbody/tr/td[2]"
+                        }
+                    ]
+                }
+            ],
+            "pagination": {
+                "hasPaginator": false
+            }
+        }
+    ]
+}

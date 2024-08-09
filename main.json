@@ -1,0 +1,78 @@
+{
+    "settings0": [
+        {
+            "url": "https://www.amazon.com/",
+            "actions": [
+                {
+                    "type": "search",
+                    "query": "Mushoku Tensei Light novel",
+                    "searchBoxXPath": "//input[@id='twotabsearchtextbox']",
+                    "submitXPath": "//input[@id='nav-search-submit-button']"
+                },
+                {
+                    "type": "extract",
+                    "data": [
+                        {
+                            "name": "Title",
+                            "xpath": "//div[@data-component-type='s-search-result']//h2//a//span"
+                        },
+                        {
+                            "name": "Price",
+                            "xpath": "//div[@data-component-type='s-search-result']//span[@class='a-price-whole']"
+                        }
+                    ]
+                }
+            ],
+            "pagination": {
+                "hasPaginator": true,
+                "nextPageXPath": "//li[@class='a-last']/a"
+            }
+        }
+    ],
+    "settings1": [
+        {
+            "url": "https://en.wikipedia.org/wiki/.hack_(video_game_series)",
+            "actions": [
+                {
+                    "type": "extract",
+                    "data": [
+                        {
+                            "name": "Title",
+                            "xpath": "//*[@id='mw-content-text']/div[1]/div[14]/table/tbody/tr/td[1]"
+                        },
+                        {
+                            "name": "lenght",
+                            "xpath": "//*[@id='mw-content-text']/div[1]/div[14]/table/tbody/tr/td[2]"
+                        }
+                    ]
+                }
+            ],
+            "pagination": {
+                "hasPaginator": false
+            }
+        }
+    ],
+    "settings2": [
+        {
+            "url": "https://pokemon.fandom.com/es/wiki/Pikachu",
+            "actions": [
+                {
+                    "type": "extract",
+                    "data": [
+                        {
+                            "name": "Stat",
+                            "xpath": "//div[@id=\"mw-content-text\"]/div/table[@class=\"estadisticas\"]//tr/th"
+                        },
+                        {
+                            "name": "Value",
+                            "xpath": "//div[@id=\"mw-content-text\"]/div/table[@class=\"estadisticas\"]//tr/td"
+                        }
+                    ]
+                }
+            ],
+            "pagination": {
+                "hasPaginator": false
+            }
+        }
+    ]
+}

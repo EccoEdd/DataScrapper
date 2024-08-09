@@ -1,8 +1,13 @@
+import logging
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.service import Service
 from webdriver_manager.firefox import GeckoDriverManager
-from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import NoSuchElementException, TimeoutException
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
+logging.basicConfig(level=logging.INFO)
 
 class TableScraper:
     def __init__(self, conf):
@@ -16,57 +21,84 @@ class TableScraper:
         options.add_argument('--ignore-certificate-errors-spki-list')
         options.add_argument('--ignore-ssl-errors')
         self.driver = webdriver.Firefox(service=Service(GeckoDriverManager().install()), options=options)
+        self.driver.get(self.url)
 
     def perform_actions(self):
-        self.driver.get(self.url)
-        self.driver.implicitly_wait(6)
+        all_data = []
         for action in self.actions:
             if action['type'] == 'search':
-                self.perform_search(action)
+                self._perform_search(action)
             elif action['type'] == 'extract':
-                data = self.extract_data(action['data'])
-                return data
+                page_data = self._extract_data(action['data'])
+                all_data.extend(page_data)
+                
+                # Handle pagination if necessary
+                while self._handle_pagination():
+                    page_data = self._extract_data(action['data'])
+                    all_data.extend(page_data)
+        
+        return all_data
 
-    def perform_search(self, action):
-        search_box = self.driver.find_element(By.XPATH, action['searchBoxXPath'])
-        search_box.send_keys(action['query'])
-        submit_button = self.driver.find_element(By.XPATH, action['submitXPath'])
-        submit_button.click()
+    def _perform_search(self, action):
+        try:
+            search_box = WebDriverWait(self.driver, 15).until(
+                EC.presence_of_element_located((By.XPATH, action['searchBoxXPath']))
+            )
+            search_box.send_keys(action['query'])
+            submit_button = self.driver.find_element(By.XPATH, action['submitXPath'])
+            submit_button.click()
+            WebDriverWait(self.driver, 15).until(
+                EC.presence_of_element_located((By.XPATH, "//span[@class='a-size-medium a-color-base a-text-normal']"))
+            )
+        except (NoSuchElementException, TimeoutException) as e:
+            logging.error(f"Error performing search: {e}")
+            raise
 
-    def extract_data(self, data_fields):
-        data = []
-        while True:
-            page_data = []
-            extracted_data = {field['name']: self.driver.find_elements(By.XPATH, field['xpath']) for field in data_fields}
-            primary_field = data_fields[0]['name']
-            max_len = len(extracted_data[primary_field])
-            for i in range(max_len):
-                item = {}
-                for field in data_fields:
-                    elements = extracted_data[field['name']]
-                    if i < len(elements):
-                        value = elements[i].text if 'attribute' not in field else elements[i].get_attribute(field['attribute'])
-                        item[field['name']] = value
-                    else:
-                        item[field['name']] = None
-                page_data.append(item)
-            data.extend(page_data)
-            
-            if self.pagination.get('hasPaginator'):
-                try:
-                    next_button = self.driver.find_element(By.XPATH, self.pagination['nextPageXPath'])
-                    if next_button.is_enabled():
-                        next_button.click()
-                        self.driver.implicitly_wait(3)
-                    else:
-                        break
-                except NoSuchElementException:
-                    break
-            else:
-                break
-        return data
+    def _extract_data(self, data_fields):
+        extracted_data = {}
+        for field in data_fields:
+            try:
+                elements = WebDriverWait(self.driver, 10).until(
+                    EC.presence_of_all_elements_located((By.XPATH, field['xpath']))
+                )
+                extracted_data[field['name']] = elements
+            except (NoSuchElementException, TimeoutException):
+                logging.warning(f"No elements found for {field['name']} using XPath {field['xpath']}")
+                extracted_data[field['name']] = []
+
+        primary_field = data_fields[0]['name']
+        max_len = len(extracted_data.get(primary_field, []))
+
+        page_data = []
+        for i in range(max_len):
+            item = {}
+            for field in data_fields:
+                elements = extracted_data[field['name']]
+                if i < len(elements):
+                    value = elements[i].text if 'attribute' not in field else elements[i].get_attribute(field['attribute'])
+                    item[field['name']] = value
+                else:
+                    item[field['name']] = None
+            page_data.append(item)
+        return page_data
+
+    def _handle_pagination(self):
+        if self.pagination.get('hasPaginator'):
+            try:
+                next_button = WebDriverWait(self.driver, 10).until(
+                    EC.element_to_be_clickable((By.XPATH, self.pagination['nextPageXPath']))
+                )
+                if next_button:
+                    next_button.click()
+                    WebDriverWait(self.driver, 10).until(
+                        EC.presence_of_element_located((By.XPATH, "//span[@class='a-size-medium a-color-base a-text-normal']"))
+                    )
+                    return True
+            except (NoSuchElementException, TimeoutException) as e:
+                logging.info("No more pages to navigate or unable to click next button.")
+                return False
+        return False
 
     def close_driver(self):
         if self.driver:
-            self.driver.close()
             self.driver.quit()
